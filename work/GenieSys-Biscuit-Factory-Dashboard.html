@@ -1,0 +1,2329 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#08172d" />
+    <title>MIFAD Expert · MIFAD</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --navy: #08172d;
+        --navy-soft: #102543;
+        --blue: #2864e8;
+        --blue-strong: #1c55d7;
+        --blue-pale: #edf3ff;
+        --ink: #152238;
+        --muted: #718096;
+        --line: #e4eaf2;
+        --surface: #ffffff;
+        --canvas: #f5f6fb;
+        --green: #15996b;
+        --green-bg: #e9f8f1;
+        --amber: #c97a06;
+        --amber-bg: #fff5e3;
+        --red: #d83b57;
+        --red-bg: #fff0f2;
+        --slate: #7c8ba3;
+        --slate-bg: #eff2f7;
+        --violet: #8756e8;
+        --violet-bg: #f3edff;
+        --shadow:
+          0 8px 24px rgba(22, 42, 75, 0.06), 0 1px 3px rgba(22, 42, 75, 0.04);
+        --radius-lg: 16px;
+        --radius-md: 12px;
+        --radius-sm: 9px;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        color: var(--ink);
+        background: var(--canvas);
+        font-family: Inter, "Segoe UI", sans-serif;
+        font-size: 13px;
+      }
+      button,
+      select {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      .app-shell {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 236px minmax(0, 1fr);
+      }
+      .sidebar {
+        background: var(--navy);
+        color: #d9e3f3;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        padding: 22px 13px 14px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow: auto;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 0 13px 23px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      .brand-mark {
+        width: 29px;
+        height: 29px;
+        display: grid;
+        place-items: center;
+        border-radius: 9px;
+        background: linear-gradient(135deg, #4aa7ff, #584ee8);
+        color: white;
+        font-size: 13px;
+        box-shadow: 0 5px 15px #2864e83b;
+      }
+      .brand-name {
+        color: #fff;
+        letter-spacing: 0.12em;
+        font-size: 14px;
+        font-weight: 800;
+      }
+      .brand-caption {
+        color: #8394ae;
+        font-size: 9px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        margin-top: 3px;
+      }
+      .nav-wrap {
+        padding-top: 18px;
+      }
+      .nav-group {
+        margin-bottom: 19px;
+      }
+      .nav-label {
+        color: #7486a1;
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        padding: 0 13px 7px;
+      }
+      .nav-link {
+        display: flex;
+        gap: 11px;
+        align-items: center;
+        min-height: 37px;
+        margin: 2px 0;
+        padding: 0 12px;
+        border-radius: 9px;
+        color: #a9b8cd;
+        text-decoration: none;
+        font-size: 11px;
+        font-weight: 500;
+        transition:
+          background 0.16s ease,
+          color 0.16s ease;
+      }
+      .nav-link i {
+        width: 15px;
+        text-align: center;
+        font-size: 12px;
+        color: #8ea1bc;
+      }
+      .nav-link:hover {
+        background: rgba(255, 255, 255, 0.07);
+        color: #fff;
+      }
+      .nav-link.active {
+        color: #fff;
+        background: linear-gradient(100deg, #2864e8, #3475f2);
+        box-shadow: 0 7px 16px rgba(26, 85, 215, 0.28);
+      }
+      .nav-link.active i {
+        color: #fff;
+      }
+      .sidebar-spacer {
+        flex: 1;
+        min-height: 14px;
+      }
+      .account {
+        display: flex;
+        gap: 9px;
+        align-items: center;
+        padding: 12px 10px 2px;
+        border-top: 1px solid rgba(255, 255, 255, 0.09);
+      }
+      .avatar {
+        width: 30px;
+        height: 30px;
+        border-radius: 10px;
+        background: #2864e8;
+        color: #fff;
+        display: grid;
+        place-items: center;
+        font-size: 10px;
+        font-weight: 700;
+        flex: 0 0 auto;
+      }
+      .account-name {
+        color: #eff4fc;
+        font-weight: 600;
+        font-size: 10px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .account-email {
+        color: #8092ad;
+        font-size: 9px;
+        margin-top: 3px;
+      }
+      .account-logout {
+        margin-left: auto;
+        color: #8da0bc;
+        background: none;
+        border: 0;
+        padding: 6px;
+      }
+      .main {
+        min-width: 0;
+      }
+      .topbar {
+        min-height: 67px;
+        padding: 0 34px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.94);
+        position: sticky;
+        z-index: 5;
+        top: 0;
+      }
+      .crumb {
+        color: #8491a4;
+        font-size: 10px;
+        margin-bottom: 4px;
+      }
+      .crumb b {
+        color: #52627a;
+        font-weight: 600;
+      }
+      .page-heading {
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+      }
+      .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 7px 9px;
+        color: #5b6980;
+        background: #fff;
+        font-size: 10px;
+        font-weight: 600;
+      }
+      .pill.enterprise {
+        color: #4965ad;
+        background: #f7f8ff;
+        border-color: #e3e8ff;
+      }
+      .live-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #21ad78;
+        box-shadow: 0 0 0 3px #21ad781a;
+      }
+      .clock {
+        color: #718096;
+        font-size: 10px;
+        font-variant-numeric: tabular-nums;
+        padding: 0 4px;
+      }
+      .icon-button {
+        width: 34px;
+        height: 34px;
+        display: grid;
+        place-items: center;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        color: #607088;
+        background: #fff;
+        position: relative;
+      }
+      .notification-dot {
+        width: 6px;
+        height: 6px;
+        position: absolute;
+        top: 7px;
+        right: 7px;
+        background: var(--red);
+        border: 1px solid #fff;
+        border-radius: 50%;
+      }
+      .user-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 11px;
+        display: grid;
+        place-items: center;
+        background: #2864e8;
+        color: #fff;
+        border: 2px solid #dce8ff;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .content {
+        max-width: 1540px;
+        margin: 0 auto;
+        padding: 24px 34px 40px;
+      }
+      .filterbar {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        padding: 0 0 17px;
+      }
+      .filter-caption {
+        color: #7b8799;
+        font-weight: 700;
+        font-size: 9px;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-right: 1px;
+      }
+      .filter-select {
+        appearance: none;
+        border: 1px solid var(--line);
+        background: #fff;
+        color: #4d5d75;
+        border-radius: 8px;
+        padding: 8px 30px 8px 11px;
+        min-width: 126px;
+        font-size: 10px;
+        font-weight: 600;
+        outline: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='m3 4.5 3 3 3-3' fill='none' stroke='%23718096' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 10px center;
+      }
+      .filter-select:focus-visible,
+      button:focus-visible,
+      a:focus-visible {
+        outline: 3px solid #9dbbff;
+        outline-offset: 2px;
+      }
+      .filter-spacer {
+        flex: 1;
+      }
+      .updated {
+        color: #8491a4;
+        font-size: 10px;
+      }
+      .flow-card,
+      .zone-card {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow);
+      }
+      .flow-card {
+        overflow: hidden;
+      }
+      .flow-overview {
+        display: grid;
+        grid-template-columns: minmax(205px, 0.95fr) minmax(440px, 1.6fr);
+        gap: 24px;
+        align-items: center;
+        padding: 21px 23px 20px;
+      }
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--blue);
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .eyebrow .live-dot {
+        width: 7px;
+        height: 7px;
+      }
+      h1 {
+        font-size: 20px;
+        letter-spacing: -0.035em;
+        margin: 8px 0 6px;
+        line-height: 1.25;
+      }
+      .subtitle {
+        color: var(--muted);
+        font-size: 11px;
+        line-height: 1.55;
+        max-width: 310px;
+        margin: 0;
+      }
+      .status-grid {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(85px, 1fr));
+        gap: 8px;
+      }
+      .status-card {
+        min-width: 0;
+        padding: 11px 11px 10px;
+        border: 1px solid var(--line);
+        border-radius: 11px;
+        background: #fff;
+        transition:
+          border-color 0.15s,
+          transform 0.15s,
+          box-shadow 0.15s;
+      }
+      .status-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(22, 42, 75, 0.08);
+      }
+      .status-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+      }
+      .status-name {
+        font-size: 8px;
+        font-weight: 800;
+        color: #75839a;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        white-space: nowrap;
+      }
+      .status-indicator {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        flex: 0 0 auto;
+      }
+      .status-value {
+        font-size: 19px;
+        font-weight: 700;
+        letter-spacing: -0.04em;
+        margin-top: 7px;
+        line-height: 1;
+      }
+      .status-share {
+        font-size: 8px;
+        color: #8793a4;
+        margin-top: 4px;
+      }
+      .status-track {
+        height: 4px;
+        margin-top: 8px;
+        border-radius: 5px;
+        background: #edf0f5;
+        overflow: hidden;
+      }
+      .status-fill {
+        height: 100%;
+        border-radius: inherit;
+      }
+      .running .status-indicator,
+      .running .status-fill {
+        background: var(--green);
+      }
+      .idle .status-indicator,
+      .idle .status-fill {
+        background: var(--amber);
+      }
+      .alarm .status-indicator,
+      .alarm .status-fill {
+        background: var(--red);
+      }
+      .offline .status-indicator,
+      .offline .status-fill {
+        background: #94a3b8;
+      }
+      .maintenance .status-indicator,
+      .maintenance .status-fill {
+        background: var(--violet);
+      }
+      .stage-nav {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid var(--line);
+        background: #f9fbfd;
+      }
+      .stage-button {
+        border: 0;
+        background: transparent;
+        border-right: 1px solid #edf0f4;
+        padding: 13px 16px 12px;
+        text-align: left;
+        min-width: 0;
+        position: relative;
+        color: #6f7e94;
+        transition:
+          background 0.16s,
+          color 0.16s;
+      }
+      .stage-button:last-child {
+        border-right: 0;
+      }
+      .stage-button:hover {
+        background: #f1f5ff;
+      }
+      .stage-button[aria-selected="true"] {
+        color: var(--blue-strong);
+        background: #f5f8ff;
+      }
+      .stage-button[aria-selected="true"]::after {
+        content: "";
+        position: absolute;
+        height: 2px;
+        background: linear-gradient(90deg, #2d68ee, #65b4fa);
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
+      .stage-number {
+        display: block;
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      .stage-name {
+        display: block;
+        color: #263650;
+        font-size: 10px;
+        font-weight: 700;
+        margin-top: 4px;
+      }
+      .stage-button[aria-selected="true"] .stage-name {
+        color: var(--blue-strong);
+      }
+      .stage-detail {
+        display: block;
+        color: #8491a4;
+        font-size: 9px;
+        margin-top: 3px;
+      }
+      .zone-card {
+        margin-top: 14px;
+        overflow: hidden;
+      }
+      .zone-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 15px 19px;
+        border-bottom: 1px solid var(--line);
+        background: linear-gradient(100deg, #f7faff, #fff 65%);
+      }
+      .zone-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        min-width: 0;
+      }
+      .zone-index {
+        width: 33px;
+        height: 33px;
+        border-radius: 10px;
+        display: grid;
+        place-items: center;
+        color: var(--blue);
+        background: var(--blue-pale);
+        font-size: 11px;
+        font-weight: 800;
+        flex: 0 0 auto;
+      }
+      .zone-card[data-stage="dispensing"] .zone-index {
+        color: var(--amber);
+        background: var(--amber-bg);
+      }
+      .zone-card[data-stage="production"] .zone-index {
+        color: var(--violet);
+        background: var(--violet-bg);
+      }
+      .zone-card[data-stage="finished"] .zone-index {
+        color: var(--green);
+        background: var(--green-bg);
+      }
+      .zone-title {
+        font-size: 11px;
+        font-weight: 800;
+        letter-spacing: 0.015em;
+        text-transform: uppercase;
+      }
+      .zone-subtitle {
+        color: #8793a4;
+        font-size: 9px;
+        margin-top: 4px;
+      }
+      .count-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #5e6d84;
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 6px 9px;
+        font-size: 9px;
+        font-weight: 600;
+        white-space: nowrap;
+      }
+      .count-chip i {
+        color: #8794a7;
+      }
+      .zone-body {
+        padding: 18px 19px 20px;
+      }
+      .zone-stats {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(110px, 1fr));
+        gap: 9px;
+      }
+      .metric-card {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 12px;
+        background: #fff;
+        min-height: 63px;
+      }
+      .metric-label {
+        color: #78869b;
+        font-size: 8px;
+        font-weight: 800;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+      .metric-value {
+        color: #1b2a41;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: -0.035em;
+        margin-top: 6px;
+        line-height: 1;
+      }
+      .metric-card.blue {
+        border-color: #dce7ff;
+      }
+      .metric-card.blue .metric-value {
+        color: var(--blue);
+      }
+      .metric-card.amber {
+        border-color: #f3dfb4;
+      }
+      .metric-card.amber .metric-value {
+        color: #a75f00;
+      }
+      .metric-card.green {
+        border-color: #c7ebdb;
+      }
+      .metric-card.green .metric-value {
+        color: var(--green);
+      }
+      .progress-line {
+        height: 3px;
+        border-radius: 3px;
+        background: #f3e5c9;
+        margin-top: 6px;
+        overflow: hidden;
+      }
+      .progress-line span {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: #e0a43c;
+      }
+      .section-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin: 20px 0 9px;
+      }
+      .section-label {
+        color: #4d5f7a;
+        font-size: 9px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .section-meta {
+        color: #8793a4;
+        font-size: 9px;
+      }
+      .empty-state {
+        min-height: 103px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        background: #fbfcfe;
+        border: 1px dashed #dbe3ed;
+        border-radius: 10px;
+        padding: 18px;
+      }
+      .empty-icon {
+        width: 32px;
+        height: 32px;
+        margin: 0 auto 8px;
+        display: grid;
+        place-items: center;
+        border-radius: 10px;
+        color: #8293ac;
+        background: #f0f3f8;
+        font-size: 12px;
+      }
+      .empty-title {
+        color: #40516a;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .empty-copy {
+        color: #8793a4;
+        font-size: 9px;
+        margin-top: 4px;
+      }
+      .raw-empty {
+        min-height: 173px;
+      }
+      .raw-empty .empty-icon {
+        margin-bottom: 10px;
+      }
+      .line-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(150px, 1fr));
+        gap: 9px;
+      }
+      .line-tile {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 10px 12px;
+        background: #fff;
+      }
+      .line-tile.selected {
+        border-color: #9adcc4;
+        background: #f0fcf7;
+      }
+      .line-code {
+        color: #27374f;
+        font-size: 10px;
+        font-weight: 800;
+      }
+      .line-description {
+        color: #8491a4;
+        font-size: 9px;
+        margin-top: 4px;
+      }
+      .room-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 12px;
+      }
+      .room-card {
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 12px;
+        background: #f9fbfd;
+      }
+      .room-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+      }
+      .room-title {
+        font-size: 11px;
+        font-weight: 800;
+        color: #263650;
+      }
+      .room-equipment-count {
+        color: #78869b;
+        font-size: 8px;
+        font-weight: 700;
+      }
+      .room-card .machine-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .machine-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(190px, 1fr));
+        gap: 10px;
+      }
+      .machine-card {
+        min-width: 0;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        padding: 13px;
+        box-shadow: 0 4px 14px rgba(22, 42, 75, 0.04);
+      }
+      .machine-card-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 9px;
+      }
+      .machine-id {
+        color: #8290a4;
+        font-size: 8px;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+      }
+      .machine-name {
+        color: #1b2a41;
+        font-size: 11px;
+        font-weight: 700;
+        margin-top: 4px;
+      }
+      .machine-kind {
+        color: #8793a4;
+        font-size: 9px;
+        margin-top: 3px;
+      }
+      .machine-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 4px 7px;
+        color: #77869b;
+        background: #fbfcfe;
+        font-size: 8px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .machine-status i {
+        font-size: 6px;
+        color: #9ba7b8;
+      }
+      .signal-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 7px;
+        margin-top: 13px;
+      }
+      .signal-box {
+        border: 1px solid #e8edf4;
+        border-radius: 9px;
+        padding: 8px;
+        background: #fafbfd;
+        min-width: 0;
+      }
+      .signal-label {
+        color: #7a889c;
+        font-size: 7px;
+        font-weight: 800;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+      }
+      .signal-value {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #53637a;
+        font-size: 9px;
+        font-weight: 700;
+        margin-top: 6px;
+      }
+      .signal-value i {
+        color: #9aa7b8;
+        font-size: 8px;
+      }
+      .iot-note {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: #8390a2;
+        font-size: 8px;
+        margin-top: 10px;
+      }
+      .iot-note i {
+        color: #2864e8;
+      }
+      .demo-note {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        color: #8a5b0a;
+        background: #fff8e9;
+        border: 1px solid #f2dfb7;
+        border-radius: 7px;
+        padding: 6px 8px;
+        font-size: 8px;
+        font-weight: 700;
+      }
+      .material-list {
+        display: grid;
+        gap: 8px;
+      }
+      .material-row {
+        display: grid;
+        grid-template-columns:
+          minmax(150px, 1.5fr) minmax(80px, 0.8fr) minmax(90px, 1fr)
+          minmax(75px, 0.7fr);
+        align-items: center;
+        gap: 10px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 11px 13px;
+        background: #fff;
+      }
+      .material-name {
+        color: #27374f;
+        font-size: 10px;
+        font-weight: 700;
+      }
+      .material-label {
+        color: #8692a3;
+        font-size: 7px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 4px;
+      }
+      .material-value {
+        color: #53637a;
+        font-size: 9px;
+        font-weight: 600;
+      }
+      .stock-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        color: #17815f;
+        background: #eaf8f1;
+        border-radius: 20px;
+        padding: 4px 7px;
+        font-size: 8px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .stock-status i {
+        font-size: 6px;
+      }
+      .zone-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .primary-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        border: 1px solid #2864e8;
+        border-radius: 9px;
+        padding: 8px 11px;
+        color: #fff;
+        background: linear-gradient(110deg, #2864e8, #3679f4);
+        box-shadow: 0 4px 10px rgba(40, 100, 232, 0.18);
+        font-size: 9px;
+        font-weight: 700;
+        white-space: nowrap;
+        transition:
+          transform 0.15s,
+          box-shadow 0.15s;
+      }
+      .primary-button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 7px 14px rgba(40, 100, 232, 0.24);
+      }
+      .primary-button[hidden] {
+        display: none;
+      }
+      .secondary-button {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 8px 11px;
+        color: #566780;
+        background: #fff;
+        font-size: 9px;
+        font-weight: 700;
+      }
+      .material-table-wrap,
+      .data-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        background: #fff;
+      }
+      .material-table,
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 620px;
+      }
+      .material-table th,
+      .data-table th {
+        color: #7b899d;
+        background: #f8fafd;
+        text-align: left;
+        font-size: 8px;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        padding: 10px 12px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      .material-table td,
+      .data-table td {
+        color: #465770;
+        font-size: 9px;
+        padding: 10px 12px;
+        border-bottom: 1px solid #edf0f5;
+        white-space: nowrap;
+      }
+      .material-table tr:last-child td,
+      .data-table tr:last-child td {
+        border-bottom: 0;
+      }
+      .material-table td:first-child,
+      .data-table td:first-child {
+        color: #23344c;
+        font-weight: 700;
+      }
+      .modal-backdrop {
+        position: fixed;
+        inset: 0;
+        z-index: 30;
+        display: grid;
+        place-items: center;
+        padding: 18px;
+        background: rgba(8, 23, 45, 0.48);
+        backdrop-filter: blur(3px);
+      }
+      .modal-backdrop[hidden] {
+        display: none;
+      }
+      .modal-card {
+        width: min(100%, 420px);
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        box-shadow: 0 24px 70px rgba(8, 23, 45, 0.25);
+        padding: 21px;
+      }
+      .modal-top {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 17px;
+      }
+      .modal-title {
+        font-size: 16px;
+        font-weight: 700;
+        color: #18283f;
+      }
+      .modal-copy {
+        color: var(--muted);
+        font-size: 10px;
+        line-height: 1.5;
+        margin-top: 5px;
+      }
+      .modal-close {
+        border: 0;
+        background: transparent;
+        color: #75839a;
+        width: 28px;
+        height: 28px;
+        border-radius: 7px;
+      }
+      .form-field {
+        display: grid;
+        gap: 6px;
+        margin-bottom: 12px;
+      }
+      .form-field label {
+        color: #566780;
+        font-size: 9px;
+        font-weight: 700;
+      }
+      .form-field input,
+      .form-field select {
+        width: 100%;
+        min-height: 38px;
+        padding: 0 11px;
+        color: #27374f;
+        border: 1px solid #dce3ed;
+        border-radius: 8px;
+        background: #fff;
+        font: inherit;
+        font-size: 10px;
+        outline: none;
+      }
+      .form-field input:focus,
+      .form-field select:focus {
+        border-color: #7ea6ff;
+        box-shadow: 0 0 0 3px #2864e81a;
+      }
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 110px;
+        gap: 10px;
+      }
+      .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 17px;
+      }
+      .zone-content {
+        animation: reveal 0.2s ease-out;
+      }
+      @keyframes reveal {
+        from {
+          opacity: 0.5;
+          transform: translateY(3px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .toast {
+        position: fixed;
+        right: 24px;
+        bottom: 22px;
+        padding: 11px 14px;
+        background: var(--navy);
+        color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 8px 25px #07172d33;
+        font-size: 11px;
+        opacity: 0;
+        transform: translateY(8px);
+        pointer-events: none;
+        transition: all 0.2s;
+        z-index: 20;
+      }
+      .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+      .dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        width: 220px;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 14px 32px rgba(22, 42, 75, 0.14);
+        display: none;
+        z-index: 10;
+      }
+      .dropdown.open {
+        display: block;
+      }
+      .dropdown-title {
+        font-size: 11px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+      .dropdown-copy {
+        font-size: 10px;
+        line-height: 1.5;
+        color: var(--muted);
+      }
+      .action-wrap {
+        position: relative;
+      }
+      .help-link {
+        display: inline-flex;
+        width: 100%;
+        padding: 7px 0;
+        border: 0;
+        background: transparent;
+        color: #52627a;
+        font-size: 10px;
+        text-align: left;
+      }
+      .help-link + .help-link {
+        border-top: 1px solid #eef1f5;
+      }
+      @media (max-width: 1150px) {
+        .app-shell {
+          grid-template-columns: 210px minmax(0, 1fr);
+        }
+        .content {
+          padding-left: 22px;
+          padding-right: 22px;
+        }
+        .topbar {
+          padding: 0 22px;
+        }
+        .flow-overview {
+          grid-template-columns: 1fr;
+          gap: 17px;
+        }
+        .subtitle {
+          max-width: 500px;
+        }
+      }
+      @media (max-width: 800px) {
+        .app-shell {
+          grid-template-columns: 66px minmax(0, 1fr);
+        }
+        .sidebar {
+          padding: 15px 8px 10px;
+          align-items: center;
+        }
+        .brand {
+          padding: 0 0 18px;
+          border: 0;
+        }
+        .brand-copy,
+        .nav-label,
+        .nav-link span,
+        .account-copy,
+        .account-logout {
+          display: none;
+        }
+        .brand-mark {
+          width: 34px;
+          height: 34px;
+        }
+        .nav-wrap {
+          width: 100%;
+          padding-top: 10px;
+        }
+        .nav-group {
+          margin-bottom: 10px;
+        }
+        .nav-link {
+          justify-content: center;
+          width: 46px;
+          height: 42px;
+          padding: 0;
+          margin: 3px auto;
+        }
+        .nav-link i {
+          font-size: 14px;
+        }
+        .account {
+          width: 100%;
+          justify-content: center;
+          padding: 12px 0 0;
+        }
+        .topbar {
+          min-height: 61px;
+          padding: 0 16px;
+        }
+        .top-actions {
+          gap: 6px;
+        }
+        .pill.enterprise,
+        .clock {
+          display: none;
+        }
+        .content {
+          padding: 18px 16px 32px;
+        }
+        .status-grid {
+          grid-template-columns: repeat(3, minmax(80px, 1fr));
+        }
+        .stage-button {
+          padding: 12px 10px;
+        }
+        .stage-detail {
+          display: none;
+        }
+      }
+      @media (max-width: 560px) {
+        .app-shell {
+          grid-template-columns: 1fr;
+        }
+        .sidebar {
+          position: fixed;
+          z-index: 8;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          top: auto;
+          height: 58px;
+          min-height: 58px;
+          padding: 5px 8px;
+          display: block;
+          overflow: visible;
+          box-shadow: 0 -6px 18px rgba(14, 31, 56, 0.1);
+        }
+        .brand,
+        .account,
+        .nav-label,
+        .nav-group:not(:first-child) {
+          display: none;
+        }
+        .nav-wrap {
+          padding: 0;
+        }
+        .nav-group {
+          margin: 0;
+        }
+        .nav-group:first-child {
+          display: flex;
+          justify-content: space-around;
+        }
+        .nav-link {
+          width: 51px;
+          height: 47px;
+          margin: 0;
+          border-radius: 11px;
+        }
+        .nav-link:not(.active) {
+          background: transparent;
+        }
+        .main {
+          padding-bottom: 58px;
+        }
+        .topbar {
+          position: relative;
+          padding: 0 14px;
+        }
+        .crumb {
+          font-size: 9px;
+        }
+        .page-heading {
+          font-size: 13px;
+        }
+        .top-actions .pill {
+          display: none;
+        }
+        .content {
+          padding: 15px 12px 22px;
+        }
+        .filterbar {
+          flex-wrap: wrap;
+          gap: 7px;
+          padding-bottom: 13px;
+        }
+        .filter-caption {
+          width: 100%;
+        }
+        .filter-select {
+          flex: 1;
+          min-width: 100px;
+        }
+        .updated {
+          display: none;
+        }
+        .flow-overview {
+          padding: 17px 15px;
+        }
+        h1 {
+          font-size: 18px;
+        }
+        .status-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .status-card:last-child {
+          grid-column: span 2;
+        }
+        .stage-button {
+          padding: 11px 7px;
+        }
+        .stage-number {
+          font-size: 7px;
+        }
+        .stage-name {
+          font-size: 9px;
+        }
+        .zone-header {
+          padding: 13px;
+          align-items: flex-start;
+        }
+        .zone-title {
+          font-size: 10px;
+        }
+        .zone-subtitle {
+          max-width: 230px;
+          line-height: 1.4;
+        }
+        .count-chip {
+          font-size: 8px;
+          padding: 6px 7px;
+        }
+        .zone-body {
+          padding: 14px 13px 16px;
+        }
+        .zone-stats {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .machine-grid,
+        .room-card .machine-grid {
+          grid-template-columns: 1fr;
+        }
+        .room-grid {
+          grid-template-columns: 1fr;
+        }
+        .line-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .material-row {
+          grid-template-columns: 1fr 1fr;
+        }
+        .raw-empty {
+          min-height: 145px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <div class="brand">
+          <div class="brand-mark">
+            <i class="fa-solid fa-industry" aria-hidden="true"></i>
+          </div>
+          <div class="brand-copy">
+            <div class="brand-name">GENIESYS</div>
+            <div class="brand-caption">Manufacturing suite</div>
+          </div>
+        </div>
+        <nav class="nav-wrap">
+          <div class="nav-group">
+            <div class="nav-label">Workspace</div>
+            <a href="#overview" class="nav-link" data-nav="Overview"
+              ><i class="fa-solid fa-border-all" aria-hidden="true"></i
+              ><span>Overview</span></a
+            >
+            <a href="#operation" class="nav-link" data-nav="Operation"
+              ><i class="fa-solid fa-screwdriver-wrench" aria-hidden="true"></i
+              ><span>Operation</span></a
+            >
+          </div>
+          <div class="nav-group">
+            <div class="nav-label">Expert</div>
+            <a
+              href="#mifad-expert"
+              class="nav-link active"
+              data-nav="MIFAD Expert"
+              ><i class="fa-solid fa-wave-square" aria-hidden="true"></i
+              ><span>MIFAD Expert</span></a
+            >
+          </div>
+        </nav>
+        <div class="sidebar-spacer"></div>
+        <div class="account">
+          <div class="avatar">SA</div>
+          <div class="account-copy">
+            <div class="account-name">System Administrator</div>
+            <div class="account-email">Admin@admin.com</div>
+          </div>
+          <button
+            class="account-logout"
+            type="button"
+            aria-label="Sign out"
+            title="Sign out"
+          >
+            <i
+              class="fa-solid fa-arrow-right-from-bracket"
+              aria-hidden="true"
+            ></i>
+          </button>
+        </div>
+      </aside>
+      <main class="main" id="mifad-expert">
+        <header class="topbar">
+          <div>
+            <div class="crumb">
+              MES <span aria-hidden="true">·</span> <b>Main</b>
+            </div>
+            <div class="page-heading">MIFAD Expert</div>
+          </div>
+          <div class="top-actions">
+            <span class="pill"><span class="live-dot"></span> Live</span>
+            <span class="pill enterprise">Enterprise</span>
+            <div class="action-wrap">
+              <button
+                class="icon-button"
+                id="aiButton"
+                type="button"
+                aria-label="AI assistant"
+                title="AI assistant"
+              >
+                <i class="fa-solid fa-sparkles" aria-hidden="true"></i>
+              </button>
+              <div class="dropdown" id="aiDropdown">
+                <div class="dropdown-title">Factory assistant</div>
+                <div class="dropdown-copy">
+                  Live assistance for your production view. Connect your factory
+                  data to enable insights.
+                </div>
+              </div>
+            </div>
+            <span class="clock" id="clock">11:37:54</span>
+            <div class="action-wrap">
+              <button
+                class="icon-button"
+                id="notificationButton"
+                type="button"
+                aria-label="Notifications"
+                title="Notifications"
+              >
+                <i class="fa-regular fa-bell" aria-hidden="true"></i
+                ><span class="notification-dot"></span>
+              </button>
+              <div class="dropdown" id="notificationDropdown">
+                <div class="dropdown-title">Notifications</div>
+                <div class="dropdown-copy">No new notifications.</div>
+              </div>
+            </div>
+            <button
+              class="user-avatar"
+              id="userButton"
+              type="button"
+              aria-label="User profile"
+              title="User profile"
+            >
+              SA
+            </button>
+          </div>
+        </header>
+        <div class="content">
+          <div class="filterbar" aria-label="Dashboard filters">
+            <span class="filter-caption"
+              ><i class="fa-solid fa-sliders" aria-hidden="true"></i>
+              Filters</span
+            >
+            <label class="sr-only" for="factoryFilter">Factory</label>
+            <select class="filter-select" id="factoryFilter">
+              <option>MF1</option>
+            </select>
+            <label class="sr-only" for="lineFilter">Production line</label>
+            <select class="filter-select" id="lineFilter">
+              <option>All lines</option>
+              <option>Line 1</option>
+              <option>Line 2</option>
+            </select>
+            <span class="filter-spacer"></span>
+            <span class="updated"
+              ><i class="fa-solid fa-rotate" aria-hidden="true"></i> Updated
+              just now</span
+            >
+          </div>
+          <section class="flow-card" aria-labelledby="flowTitle">
+            <div class="flow-overview">
+              <div>
+                <div class="eyebrow">
+                  <span class="live-dot"></span> MIFAD Expert
+                </div>
+                <h1 id="flowTitle">Factory Material Flow</h1>
+                <p class="subtitle">
+                  Raw materials, machine weighing, mixing and powder filling in
+                  one live view.
+                </p>
+              </div>
+              <div class="status-grid" aria-label="Equipment status summary">
+                <div class="status-card running">
+                  <div class="status-top">
+                    <span class="status-name">Running</span
+                    ><span class="status-indicator"></span>
+                  </div>
+                  <div class="status-value">4</div>
+                  <div class="status-share">50% of equipment</div>
+                  <div class="status-track">
+                    <div class="status-fill" style="width: 50%"></div>
+                  </div>
+                </div>
+                <div class="status-card idle">
+                  <div class="status-top">
+                    <span class="status-name">Idle</span
+                    ><span class="status-indicator"></span>
+                  </div>
+                  <div class="status-value">1</div>
+                  <div class="status-share">13% of equipment</div>
+                  <div class="status-track">
+                    <div class="status-fill" style="width: 13%"></div>
+                  </div>
+                </div>
+                <div class="status-card alarm">
+                  <div class="status-top">
+                    <span class="status-name">Alarm</span
+                    ><span class="status-indicator"></span>
+                  </div>
+                  <div class="status-value">1</div>
+                  <div class="status-share">13% of equipment</div>
+                  <div class="status-track">
+                    <div class="status-fill" style="width: 13%"></div>
+                  </div>
+                </div>
+                <div class="status-card offline">
+                  <div class="status-top">
+                    <span class="status-name">Offline</span
+                    ><span class="status-indicator"></span>
+                  </div>
+                  <div class="status-value">1</div>
+                  <div class="status-share">13% of equipment</div>
+                  <div class="status-track">
+                    <div class="status-fill" style="width: 13%"></div>
+                  </div>
+                </div>
+                <div class="status-card maintenance">
+                  <div class="status-top">
+                    <span class="status-name">Maintenance</span
+                    ><span class="status-indicator"></span>
+                  </div>
+                  <div class="status-value">1</div>
+                  <div class="status-share">13% of equipment</div>
+                  <div class="status-track">
+                    <div class="status-fill" style="width: 13%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="stage-nav"
+              role="tablist"
+              aria-label="Production stages"
+            >
+              <button
+                class="stage-button"
+                role="tab"
+                id="tab-raw"
+                aria-controls="stagePanel"
+                aria-selected="true"
+                data-stage="raw"
+              >
+                <span class="stage-number">01&nbsp; Raw Materials</span
+                ><span class="stage-name">Warehouse levels</span
+                ><span class="stage-detail">Material storage</span>
+              </button>
+              <button
+                class="stage-button"
+                role="tab"
+                id="tab-dispensing"
+                aria-controls="stagePanel"
+                aria-selected="false"
+                data-stage="dispensing"
+              >
+                <span class="stage-number">02&nbsp; Dispensing Area</span
+                ><span class="stage-name">Machine weight readings</span
+                ><span class="stage-detail">Received by system</span>
+              </button>
+              <button
+                class="stage-button"
+                role="tab"
+                id="tab-production"
+                aria-controls="stagePanel"
+                aria-selected="false"
+                data-stage="production"
+              >
+                <span class="stage-number">03&nbsp; Production</span
+                ><span class="stage-name">Line machines</span
+                ><span class="stage-detail">Live production</span>
+              </button>
+              <button
+                class="stage-button"
+                role="tab"
+                id="tab-finished"
+                aria-controls="stagePanel"
+                aria-selected="false"
+                data-stage="finished"
+              >
+                <span class="stage-number">04&nbsp; Powder Filling</span
+                ><span class="stage-name">Powder filling & bagging</span
+                ><span class="stage-detail">Mixer discharge signals</span>
+              </button>
+            </div>
+          </section>
+          <section
+            class="zone-card"
+            data-stage="raw"
+            id="stagePanel"
+            role="tabpanel"
+            aria-labelledby="tab-raw"
+          >
+            <div class="zone-header">
+              <div class="zone-title-wrap">
+                <div class="zone-index" id="zoneIndex">01</div>
+                <div>
+                  <div class="zone-title" id="zoneTitle">
+                    Zone 1 · Raw Material Warehouse
+                  </div>
+                  <div class="zone-subtitle" id="zoneSubtitle">
+                    Live material levels from warehouse signal
+                  </div>
+                </div>
+              </div>
+              <div class="zone-actions">
+                <button
+                  class="primary-button"
+                  id="addMaterialButton"
+                  type="button"
+                  hidden
+                >
+                  <i class="fa-solid fa-plus" aria-hidden="true"></i> Add
+                  Material</button
+                ><span class="count-chip" id="zoneCount"
+                  ><i class="fa-solid fa-boxes-stacked" aria-hidden="true"></i>
+                  4 materials</span
+                >
+              </div>
+            </div>
+            <div class="zone-body zone-content" id="zoneContent">
+              <div class="demo-note">
+                <i class="fa-solid fa-flask"></i> Sample data for layout preview
+              </div>
+              <div class="section-row">
+                <span class="section-label">Raw materials</span
+                ><span class="section-meta">4 items</span>
+              </div>
+              <div class="material-list">
+                <div class="material-row">
+                  <div>
+                    <div class="material-label">Material</div>
+                    <div class="material-name">Wheat flour</div>
+                  </div>
+                  <div>
+                    <div class="material-label">Available</div>
+                    <div class="material-value">1,250 kg</div>
+                  </div>
+                  <div>
+                    <div class="material-label">QR / ID</div>
+                    <div class="material-value">MAT-0001</div>
+                  </div>
+                  <div>
+                    <div class="material-label">Status</div>
+                    <span class="stock-status"
+                      ><i class="fa-solid fa-circle"></i> Available</span
+                    >
+                  </div>
+                </div>
+                <div class="material-row">
+                  <div>
+                    <div class="material-label">Material</div>
+                    <div class="material-name">Sugar</div>
+                  </div>
+                  <div>
+                    <div class="material-label">Available</div>
+                    <div class="material-value">640 kg</div>
+                  </div>
+                  <div>
+                    <div class="material-label">QR / ID</div>
+                    <div class="material-value">MAT-0002</div>
+                  </div>
+                  <div>
+                    <div class="material-label">Status</div>
+                    <span class="stock-status"
+                      ><i class="fa-solid fa-circle"></i> Available</span
+                    >
+                  </div>
+                </div>
+                <div class="material-row">
+                  <div>
+                    <div class="material-label">Material</div>
+                    <div class="material-name">Cocoa powder</div>
+                  </div>
+                  <div>
+                    <div class="material-label">Available</div>
+                    <div class="material-value">180 kg</div>
+                  </div>
+                  <div>
+                    <div class="material-label">QR / ID</div>
+                    <div class="material-value">MAT-0003</div>
+                  </div>
+                  <div>
+                    <div class="material-label">Status</div>
+                    <span class="stock-status"
+                      ><i class="fa-solid fa-circle"></i> Available</span
+                    >
+                  </div>
+                </div>
+                <div class="material-row">
+                  <div>
+                    <div class="material-label">Material</div>
+                    <div class="material-name">Milk powder</div>
+                  </div>
+                  <div>
+                    <div class="material-label">Available</div>
+                    <div class="material-value">95 kg</div>
+                  </div>
+                  <div>
+                    <div class="material-label">QR / ID</div>
+                    <div class="material-value">MAT-0004</div>
+                  </div>
+                  <div>
+                    <div class="material-label">Status</div>
+                    <span class="stock-status"
+                      ><i class="fa-solid fa-circle"></i> Available</span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </main>
+    </div>
+    <div class="modal-backdrop" id="materialModal" hidden>
+      <form
+        class="modal-card"
+        id="materialForm"
+        aria-labelledby="materialModalTitle"
+      >
+        <div class="modal-top">
+          <div>
+            <div class="modal-title" id="materialModalTitle">Add material</div>
+            <div class="modal-copy">
+              Add a material record and its QR identifier to the demo list.
+            </div>
+          </div>
+          <button
+            class="modal-close"
+            id="closeMaterialModal"
+            type="button"
+            aria-label="Close dialog"
+          >
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </div>
+        <div class="form-field">
+          <label for="materialName">Material name</label
+          ><input
+            id="materialName"
+            name="name"
+            required
+            placeholder="e.g. Wheat flour"
+          />
+        </div>
+        <div class="form-field">
+          <label for="materialQr">QR / Material ID</label
+          ><input
+            id="materialQr"
+            name="qr"
+            required
+            placeholder="e.g. MAT-0005"
+          />
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="materialStock">Available quantity</label
+            ><input
+              id="materialStock"
+              name="stock"
+              type="number"
+              min="0"
+              step="0.01"
+              value="0"
+            />
+          </div>
+          <div class="form-field">
+            <label for="materialUnit">Unit</label
+            ><select id="materialUnit" name="unit">
+              <option>kg</option>
+              <option>g</option>
+              <option>bags</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="secondary-button" id="cancelMaterial" type="button">
+            Cancel</button
+          ><button class="primary-button" type="submit">
+            <i class="fa-solid fa-plus" aria-hidden="true"></i> Add material
+          </button>
+        </div>
+      </form>
+    </div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <style>
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
+    </style>
+    <script>
+      const stages = {
+        raw: {
+          title: "Zone 1 · Raw Material Warehouse",
+          subtitle: "Materials registered in the warehouse",
+          count:
+            '<i class="fa-solid fa-boxes-stacked" aria-hidden="true"></i> 4 materials',
+          body: '<div class="demo-note"><i class="fa-solid fa-flask"></i> Sample data for layout preview</div><div class="section-row"><span class="section-label">Raw materials</span><span class="section-meta">4 items</span></div><div class="material-list"><div class="material-row"><div><div class="material-label">Material</div><div class="material-name">Wheat flour</div></div><div><div class="material-label">Available</div><div class="material-value">1,250 kg</div></div><div><div class="material-label">QR / ID</div><div class="material-value">MAT-0001</div></div><div><div class="material-label">Status</div><span class="stock-status"><i class="fa-solid fa-circle"></i> Available</span></div></div><div class="material-row"><div><div class="material-label">Material</div><div class="material-name">Sugar</div></div><div><div class="material-label">Available</div><div class="material-value">640 kg</div></div><div><div class="material-label">QR / ID</div><div class="material-value">MAT-0002</div></div><div><div class="material-label">Status</div><span class="stock-status"><i class="fa-solid fa-circle"></i> Available</span></div></div><div class="material-row"><div><div class="material-label">Material</div><div class="material-name">Cocoa powder</div></div><div><div class="material-label">Available</div><div class="material-value">180 kg</div></div><div><div class="material-label">QR / ID</div><div class="material-value">MAT-0003</div></div><div><div class="material-label">Status</div><span class="stock-status"><i class="fa-solid fa-circle"></i> Available</span></div></div><div class="material-row"><div><div class="material-label">Material</div><div class="material-name">Milk powder</div></div><div><div class="material-label">Available</div><div class="material-value">95 kg</div></div><div><div class="material-label">QR / ID</div><div class="material-value">MAT-0004</div></div><div><div class="material-label">Status</div><span class="stock-status"><i class="fa-solid fa-circle"></i> Available</span></div></div></div>',
+        },
+        dispensing: {
+          title: "Zone 2 · Dispensing Area",
+          subtitle:
+            "Actual weight readings received from the weighing machine, with the time of each reading",
+          count:
+            '<i class="fa-solid fa-barcode" aria-hidden="true"></i> 3 weight readings',
+          body: '<div class="demo-note"><i class="fa-solid fa-flask"></i> Sample readings for layout preview · actual values come from the machine</div><div class="zone-stats" style="margin-top:10px"><div class="metric-card blue"><div class="metric-label">Selected mixer</div><div class="metric-value" style="font-size:14px">R1_Mix1</div></div><div class="metric-card green"><div class="metric-label">Weight readings</div><div class="metric-value">3</div></div><div class="metric-card"><div class="metric-label">Last reading</div><div class="metric-value" style="font-size:14px">14:22</div></div><div class="metric-card"><div class="metric-label">Reading source</div><div class="metric-value" style="font-size:12px">Machine scale</div></div></div><div class="section-row"><span class="section-label">Recent weight readings</span><span class="section-meta">Weight and timestamp received from the machine</span></div><div class="data-table-wrap"><table class="data-table"><thead><tr><th>Material</th><th>QR / Material ID</th><th>Mixer</th><th>Measured weight</th><th>Received at</th><th>Status</th></tr></thead><tbody><tr><td>Wheat flour</td><td>MAT-0001</td><td>R1_Mix1</td><td>12.50 kg</td><td>14:18:04</td><td>Received</td></tr><tr><td>Sugar</td><td>MAT-0002</td><td>R1_Mix1</td><td>4.20 kg</td><td>14:20:16</td><td>Received</td></tr><tr><td>Cocoa powder</td><td>MAT-0003</td><td>R1_Mix1</td><td>1.40 kg</td><td>14:22:39</td><td>Received</td></tr></tbody></table></div>',
+        },
+        production: {
+          title: "Zone 3 · Production Rooms",
+          subtitle:
+            "Two rooms, each with one mixer and one filling machine. Mixer motor and discharge-gate signals are shown.",
+          count:
+            '<i class="fa-solid fa-gears" aria-hidden="true"></i> 2 rooms · 4 machines',
+          body: '<div class="demo-note"><i class="fa-solid fa-flask"></i> Sample equipment states for layout preview · not live factory data</div><div class="zone-stats" style="margin-top:10px"><div class="metric-card blue"><div class="metric-label">Production rooms</div><div class="metric-value">2</div></div><div class="metric-card green"><div class="metric-label">Mixers</div><div class="metric-value">2</div></div><div class="metric-card"><div class="metric-label">Filling machines</div><div class="metric-value">2</div></div><div class="metric-card"><div class="metric-label">Available signals</div><div class="metric-value" style="font-size:12px">Motor + gate</div></div></div><div class="section-row"><span class="section-label">Room equipment</span><span class="section-meta">Each room has one mixer and one filling machine</span></div><div class="room-grid"><section class="room-card"><div class="room-head"><div class="room-title">Room 1</div><span class="room-equipment-count">2 machines</span></div><div class="machine-grid"><article class="machine-card"><div class="machine-card-top"><div><div class="machine-id">R1_Mix1</div><div class="machine-name">Mixer 1</div><div class="machine-kind">Mixer</div></div><span class="machine-status"><i class="fa-solid fa-circle" style="color:#15996b"></i> Running</span></div><div class="signal-grid"><div class="signal-box"><div class="signal-label">Mixer motor</div><div class="signal-value">Running</div></div><div class="signal-box"><div class="signal-label">Discharge gate</div><div class="signal-value">Closed</div></div></div><div class="iot-note"><i class="fa-solid fa-tower-broadcast"></i> Sample IoT signals</div></article><article class="machine-card"><div class="machine-card-top"><div><div class="machine-id">R1_Fill1</div><div class="machine-name">Filling Machine 1</div><div class="machine-kind">Powder filling</div></div><span class="machine-status"><i class="fa-solid fa-circle"></i> No live data</span></div><div class="empty-copy" style="margin-top:14px">Filling-machine signals are not available in this preview.</div></article></div></section><section class="room-card"><div class="room-head"><div class="room-title">Room 2</div><span class="room-equipment-count">2 machines</span></div><div class="machine-grid"><article class="machine-card"><div class="machine-card-top"><div><div class="machine-id">R2_Mix1</div><div class="machine-name">Mixer 2</div><div class="machine-kind">Mixer</div></div><span class="machine-status"><i class="fa-solid fa-circle"></i> Stopped</span></div><div class="signal-grid"><div class="signal-box"><div class="signal-label">Mixer motor</div><div class="signal-value">Stopped</div></div><div class="signal-box"><div class="signal-label">Discharge gate</div><div class="signal-value">Open</div></div></div><div class="iot-note"><i class="fa-solid fa-tower-broadcast"></i> Sample IoT signals</div></article><article class="machine-card"><div class="machine-card-top"><div><div class="machine-id">R2_Fill1</div><div class="machine-name">Filling Machine 2</div><div class="machine-kind">Powder filling</div></div><span class="machine-status"><i class="fa-solid fa-circle"></i> No live data</span></div><div class="empty-copy" style="margin-top:14px">Filling-machine signals are not available in this preview.</div></article></div></section></div>',
+        },
+        finished: {
+          title: "Zone 4 · Powder Filling & Bagging",
+          subtitle:
+            "Powder is discharged from the mixer for filling into sacks. Sack counts and sack QR tracking are outside this preview.",
+          count:
+            '<i class="fa-solid fa-arrow-down-wide-short" aria-hidden="true"></i> 3 sample IoT events',
+          body: '<div class="demo-note"><i class="fa-solid fa-flask"></i> Sample IoT events for layout preview · not live factory data</div><div class="zone-stats" style="margin-top:10px"><div class="metric-card green"><div class="metric-label">Mixers reporting</div><div class="metric-value">2</div></div><div class="metric-card blue"><div class="metric-label">Motor signal</div><div class="metric-value" style="font-size:14px">Running</div></div><div class="metric-card amber"><div class="metric-label">Discharge gate</div><div class="metric-value" style="font-size:14px">Open</div></div><div class="metric-card"><div class="metric-label">Latest event</div><div class="metric-value" style="font-size:14px">14:25:00</div></div></div><div class="section-row"><span class="section-label">Recent mixer signals</span><span class="section-meta">Motor and discharge-gate state from IoT</span></div><div class="data-table-wrap"><table class="data-table"><thead><tr><th>Time received</th><th>Mixer</th><th>Signal</th><th>State</th></tr></thead><tbody><tr><td>14:25:00</td><td>R1_Mix1</td><td>Discharge gate</td><td>Closed</td></tr><tr><td>14:24:10</td><td>R1_Mix1</td><td>Discharge gate</td><td>Open</td></tr><tr><td>14:22:39</td><td>R1_Mix1</td><td>Mixer motor</td><td>Running</td></tr></tbody></table></div><p class="empty-copy" style="margin-top:12px">Powder sack quantities and individual sack IDs are not shown.</p>',
+        },
+      };
+      const addedMaterialRows = [];
+      const usedMaterialIds = ["MAT-0001", "MAT-0002", "MAT-0003", "MAT-0004"];
+      const tabs = [...document.querySelectorAll(".stage-button")];
+      const panel = document.getElementById("stagePanel");
+      function selectStage(key, focusTab = false) {
+        const stage = stages[key];
+        if (!stage) return;
+        tabs.forEach((tab) => {
+          const selected = tab.dataset.stage === key;
+          tab.setAttribute("aria-selected", String(selected));
+          tab.tabIndex = selected ? 0 : -1;
+          if (selected && focusTab) tab.focus();
+        });
+        panel.dataset.stage = key;
+        panel.setAttribute("aria-labelledby", "tab-" + key);
+        document.getElementById("zoneIndex").textContent = {
+          raw: "01",
+          dispensing: "02",
+          production: "03",
+          finished: "04",
+        }[key];
+        document.getElementById("zoneTitle").textContent = stage.title;
+        document.getElementById("zoneSubtitle").textContent = stage.subtitle;
+        document.getElementById("zoneCount").innerHTML = stage.count;
+        const content = document.getElementById("zoneContent");
+        content.innerHTML = stage.body;
+        if (key === "raw")
+          addedMaterialRows.forEach((row) =>
+            content
+              .querySelector(".material-list")
+              ?.insertAdjacentHTML("beforeend", row),
+          );
+        document.getElementById("addMaterialButton").hidden = key !== "raw";
+        content.classList.remove("zone-content");
+        requestAnimationFrame(() => content.classList.add("zone-content"));
+      }
+      tabs.forEach((tab, index) => {
+        tab.tabIndex = index === 0 ? 0 : -1;
+        tab.addEventListener("click", () => selectStage(tab.dataset.stage));
+        tab.addEventListener("keydown", (event) => {
+          if (!["ArrowRight", "ArrowLeft", "Home", "End"].includes(event.key))
+            return;
+          event.preventDefault();
+          const next =
+            event.key === "Home"
+              ? 0
+              : event.key === "End"
+                ? tabs.length - 1
+                : (index +
+                    (event.key === "ArrowRight" ? 1 : -1) +
+                    tabs.length) %
+                  tabs.length;
+          selectStage(tabs[next].dataset.stage, true);
+        });
+      });
+      selectStage("raw");
+      const toast = document.getElementById("toast");
+      let toastTimer;
+      function showToast(message) {
+        toast.textContent = message;
+        toast.classList.add("show");
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => toast.classList.remove("show"), 2100);
+      }
+      const materialModal = document.getElementById("materialModal");
+      const materialForm = document.getElementById("materialForm");
+      const addMaterialButton = document.getElementById("addMaterialButton");
+      function closeMaterialDialog() {
+        materialModal.hidden = true;
+      }
+      addMaterialButton.addEventListener("click", () => {
+        if (panel.dataset.stage !== "raw") return;
+        materialModal.hidden = false;
+        document.getElementById("materialName").focus();
+      });
+      document
+        .getElementById("closeMaterialModal")
+        .addEventListener("click", closeMaterialDialog);
+      document
+        .getElementById("cancelMaterial")
+        .addEventListener("click", closeMaterialDialog);
+      materialModal.addEventListener("click", (event) => {
+        if (event.target === materialModal) closeMaterialDialog();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !materialModal.hidden)
+          closeMaterialDialog();
+      });
+      function escapeHtml(value) {
+        return String(value).replace(
+          /[&<>"']/g,
+          (char) =>
+            ({
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
+            })[char],
+        );
+      }
+      materialForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (panel.dataset.stage !== "raw") return;
+        const name = document.getElementById("materialName").value.trim();
+        const qr = document
+          .getElementById("materialQr")
+          .value.trim()
+          .toUpperCase();
+        const stock = Number(
+          document.getElementById("materialStock").value || 0,
+        );
+        const unit = document.getElementById("materialUnit").value;
+        if (usedMaterialIds.includes(qr)) {
+          showToast("This QR / Material ID is already in use.");
+          document.getElementById("materialQr").focus();
+          return;
+        }
+        const row =
+          '<div class="material-row"><div><div class="material-label">Material</div><div class="material-name">' +
+          escapeHtml(name) +
+          '</div></div><div><div class="material-label">Available</div><div class="material-value">' +
+          stock.toLocaleString("en-US", { maximumFractionDigits: 2 }) +
+          " " +
+          escapeHtml(unit) +
+          '</div></div><div><div class="material-label">QR / ID</div><div class="material-value">' +
+          escapeHtml(qr) +
+          '</div></div><div><div class="material-label">Status</div><span class="stock-status"><i class="fa-solid fa-circle"></i> Available</span></div></div>';
+        usedMaterialIds.push(qr);
+        addedMaterialRows.push(row);
+        const count = usedMaterialIds.length;
+        stages.raw.count =
+          '<i class="fa-solid fa-boxes-stacked" aria-hidden="true"></i> ' +
+          count +
+          " materials";
+        stages.raw.body = stages.raw.body.replace(
+          /<span class="section-meta">\d+ items<\/span>/,
+          '<span class="section-meta">' + count + " items</span>",
+        );
+        selectStage("raw");
+        materialForm.reset();
+        document.getElementById("materialStock").value = "0";
+        closeMaterialDialog();
+        showToast("Material added to the Zone 1 preview.");
+      });
+      document.querySelectorAll(".nav-link").forEach((link) =>
+        link.addEventListener("click", (event) => {
+          event.preventDefault();
+          document
+            .querySelectorAll(".nav-link")
+            .forEach((item) => item.classList.remove("active"));
+          link.classList.add("active");
+          if (link.dataset.nav !== "MIFAD Expert")
+            showToast(link.dataset.nav + " is outside this screen preview.");
+        }),
+      );
+      document
+        .getElementById("lineFilter")
+        .addEventListener("change", (event) =>
+          showToast("Filter set to " + event.target.value + "."),
+        );
+      const dropdownButtons = [
+        ["aiButton", "aiDropdown"],
+        ["notificationButton", "notificationDropdown"],
+      ];
+      dropdownButtons.forEach(([buttonId, dropdownId]) => {
+        const button = document.getElementById(buttonId),
+          dropdown = document.getElementById(dropdownId);
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          document.querySelectorAll(".dropdown").forEach((other) => {
+            if (other !== dropdown) other.classList.remove("open");
+          });
+          dropdown.classList.toggle("open");
+        });
+      });
+      document
+        .getElementById("userButton")
+        .addEventListener("click", () =>
+          showToast("Signed in as System Administrator."),
+        );
+      document
+        .querySelector(".account-logout")
+        .addEventListener("click", () =>
+          showToast("Sign out is unavailable in this preview."),
+        );
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".action-wrap"))
+          document
+            .querySelectorAll(".dropdown")
+            .forEach((dropdown) => dropdown.classList.remove("open"));
+      });
+      const gateEvents = {
+        "Mixer 1": [
+          ["14:25:00", "Closed"],
+          ["14:24:10", "Open"],
+          ["14:20:16", "Closed"],
+          ["14:18:04", "Open"],
+        ],
+        "Mixer 2": [
+          ["14:33:12", "Open"],
+          ["14:30:05", "Closed"],
+          ["14:26:42", "Open"],
+          ["14:22:17", "Closed"],
+        ],
+      };
+      const gateCss = document.createElement("style");
+      gateCss.textContent =
+        ".signal-box.gate-open{background:#e9f8f1;border-color:#8dd5b6;cursor:pointer}.signal-box.gate-open .signal-value{color:#12845e}.signal-box.gate-closed{background:#fff0f2;border-color:#efb2bd;cursor:pointer}.signal-box.gate-closed .signal-value{color:#c42d49}.gate-modal-bg{position:fixed;inset:0;z-index:40;background:#08172d80;display:grid;place-items:center;padding:18px}.gate-modal{background:white;border-radius:16px;padding:22px;width:min(540px,100%);box-shadow:0 24px 70px #08172d55}.gate-event{display:flex;justify-content:space-between;padding:13px 4px;border-bottom:1px solid #edf0f5;font-size:12px}.gate-open-text{color:#12845e}.gate-closed-text{color:#c42d49}";
+      document.head.append(gateCss);
+      function tagGateBoxes() {
+        document.querySelectorAll("#zoneContent .signal-box").forEach((box) => {
+          if (
+            box
+              .querySelector(".signal-label")
+              ?.textContent.trim()
+              .toLowerCase() !== "discharge gate"
+          )
+            return;
+          const open =
+            box
+              .querySelector(".signal-value")
+              ?.textContent.trim()
+              .toLowerCase() === "open";
+          box.classList.toggle("gate-open", open);
+          box.classList.toggle("gate-closed", !open);
+          box.setAttribute("role", "button");
+          box.tabIndex = 0;
+          box.title = "Click to view gate history";
+        });
+      }
+      new MutationObserver(tagGateBoxes).observe(
+        document.getElementById("zoneContent"),
+        { childList: true, subtree: true },
+      );
+      tagGateBoxes();
+      const motorStateStyle = document.createElement("style");
+      motorStateStyle.textContent = ".signal-box.motor-running{background:#e8f8f0;border-color:#73c9a2}.signal-box.motor-running .signal-value{color:#08794f;font-weight:800}.signal-box.motor-running .signal-value:before{content:'●';color:#13a36f;margin-right:6px}.signal-box.motor-stopped{background:#fff0f2;border-color:#ef9cab}.signal-box.motor-stopped .signal-value{color:#bd304b;font-weight:800}.signal-box.motor-stopped .signal-value:before{content:'●';color:#e3465d;margin-right:6px}";
+      document.head.append(motorStateStyle);
+      function tagMixerMotorBoxes() {
+        document.querySelectorAll("#zoneContent .signal-box").forEach((box) => {
+          const label = box.querySelector(".signal-label")?.textContent.trim().toLowerCase();
+          if (label !== "mixer motor") return;
+          const running = box.querySelector(".signal-value")?.textContent.trim().toLowerCase() === "running";
+          box.classList.toggle("motor-running", running);
+          box.classList.toggle("motor-stopped", !running);
+        });
+      }
+      tagMixerMotorBoxes();
+      new MutationObserver(tagMixerMotorBoxes).observe(
+        document.getElementById("zoneContent"),
+        { childList: true, subtree: true },
+      );
+      function showGateHistory(box) {
+        const mixer =
+          box
+            .closest(".machine-card")
+            ?.querySelector(".machine-name")
+            ?.textContent.trim() || "Mixer";
+        const events = gateEvents[mixer] || [];
+        const current =
+          box.querySelector(".signal-value")?.textContent.trim() || "Unknown";
+        const modal = document.createElement("div");
+        modal.className = "gate-modal-bg";
+        modal.innerHTML =
+          '<section class="gate-modal" role="dialog" aria-modal="true"><header style="display:flex;justify-content:space-between;align-items:start"><div><strong style="font-size:16px">Discharge gate history</strong><div style="color:#718096;font-size:11px;margin-top:5px">' +
+          mixer +
+          " · current state: " +
+          current +
+          '</div></div><button class="modal-close" aria-label="Close">×</button></header><div style="font-size:9px;color:#8793a4;margin-top:14px">SAMPLE IOT EVENTS · LATEST FIRST</div>' +
+          events
+            .map(
+              (e) =>
+                '<div class="gate-event"><b class="' +
+                (e[1] === "Open" ? "gate-open-text" : "gate-closed-text") +
+                '">Gate ' +
+                (e[1] === "Open" ? "opened" : "closed") +
+                "</b><time>" +
+                e[0] +
+                "</time></div>",
+            )
+            .join("") +
+          "</section>";
+        modal.addEventListener("click", (e) => {
+          if (e.target === modal || e.target.closest(".modal-close"))
+            modal.remove();
+        });
+        document.body.append(modal);
+        modal.querySelector(".modal-close").focus();
+      }
+      document.addEventListener("click", (e) => {
+        const box = e.target.closest("#zoneContent .signal-box[role=button]");
+        if (
+          box &&
+          box
+            .querySelector(".signal-label")
+            ?.textContent.trim()
+            .toLowerCase() === "discharge gate"
+        )
+          showGateHistory(box);
+      });
+      document.addEventListener("keydown", (e) => {
+        const box = e.target.closest?.("#zoneContent .signal-box[role=button]");
+        if (
+          box &&
+          box
+            .querySelector(".signal-label")
+            ?.textContent.trim()
+            .toLowerCase() === "discharge gate" &&
+          ["Enter", " "].includes(e.key)
+        ) {
+          e.preventDefault();
+          showGateHistory(box);
+        }
+      });
+      const processDemoStyle = document.createElement('style');
+processDemoStyle.textContent = '.process-panel{background:#fff;border:1px solid #dfe7f2;border-radius:14px;padding:18px;margin-top:16px;box-shadow:0 8px 22px rgba(17,39,77,.04)}.process-panel h3{margin:0;font-size:14px;color:#10223e}.process-sub{font-size:11px;color:#71829b;margin:5px 0 14px}.process-table{width:100%;border-collapse:collapse;font-size:11px}.process-table th{text-align:left;color:#7687a0;font-size:9px;text-transform:uppercase;padding:9px;border-bottom:1px solid #e9eef5}.process-table td{padding:10px 9px;border-bottom:1px solid #edf1f6;color:#253752}.process-table tr:last-child td{border-bottom:0}.qr-chip{display:inline-flex;padding:4px 7px;border-radius:6px;background:#eef4ff;color:#315fde;font-size:10px;font-weight:700}.timeline-card{margin-top:12px;padding:12px;border:1px solid #e5ecf5;border-radius:10px;background:#fbfcfe}.timeline-top{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:11px;font-weight:700;color:#173051}.timeline-note{font-size:10px;color:#73839a;margin-top:5px}.timeline-track{height:13px;display:flex;gap:3px;margin:12px 0 6px}.timeline-track span{display:block;border-radius:4px}.timeline-track .run{background:#25b47a}.timeline-track .stop{background:#eb6574}.timeline-labels{display:flex;justify-content:space-between;font-size:9px;color:#8090a7}.timeline-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:9px;color:#73839a;margin-top:10px}.timeline-legend i{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:4px}.process-state{margin-top:10px;padding:8px 9px;border-radius:8px;background:#f2f6ff;color:#3157b5;font-size:10px;font-weight:700}.process-state.ready,.process-state.discharge{background:#e8f8f0;color:#12845e}.process-state.cleaning{background:#fff6e9;color:#a86700}.process-mobile-note{font-size:10px;color:#71829b;margin-top:12px}@media(max-width:800px){.process-panel{overflow-x:auto}.process-table{min-width:680px}}';
+document.head.append(processDemoStyle);
+function renderMifadProcessDemo(){
+ const zone=document.getElementById('zoneContent'); if(!zone)return;
+ const stage=panel.dataset.stage;
+ if(stage==='dispensing'&&!zone.querySelector('.qr-scale-panel')){
+  const rows=[['Flour','RAW-FLR-024','Room 1 · Mixer 1','25.0 kg','14:02:18'],['Powdered sugar','RAW-SUG-118','Room 1 · Mixer 1','10.0 kg','14:06:42'],['Milk powder','RAW-MLK-061','Room 2 · Mixer 2','8.5 kg','14:18:05'],['Cocoa powder','RAW-COC-032','Room 2 · Mixer 2','6.0 kg','14:21:33']];
+  const html='<section class="process-panel qr-scale-panel"><h3>Raw material QR scans & weigh readings</h3><div class="process-sub">Each raw-material sack is scanned before it enters the mixer. The scale sends its measured weight and timestamp.</div><table class="process-table"><thead><tr><th>Raw material</th><th>Sack QR</th><th>Destination</th><th>Scale weight</th><th>Received at</th></tr></thead><tbody>'+rows.map(r=>'<tr><td><b>'+r[0]+'</b></td><td><span class="qr-chip">'+r[1]+'</span></td><td>'+r[2]+'</td><td><b>'+r[3]+'</b></td><td>'+r[4]+'</td></tr>').join('')+'</tbody></table><div class="process-mobile-note">Sample IoT and QR events for the preview.</div></section>';
+  zone.insertAdjacentHTML('beforeend',html);
+ }
+ if(stage==='finished'&&!zone.querySelector('.powder-output-panel')){
+  const rows=[['Mix batch R1-2411','Room 1 · Filling Machine 1','24.80 kg','14:36:08'],['Mix batch R1-2411','Room 1 · Filling Machine 1','25.10 kg','14:37:22'],['Mix batch R1-2411','Room 1 · Filling Machine 1','24.95 kg','14:38:41'],['Mix batch R2-2411','Room 2 · Filling Machine 2','25.00 kg','14:40:03'],['Mix batch R2-2411','Room 2 · Filling Machine 2','24.70 kg','14:41:16']];
+  const html='<section class="process-panel powder-output-panel"><h3>Powder sack filling · scale readings</h3><div class="process-sub">Each finished powder sack reading is linked to the mixer batch from the same room. The scale provides the weight and time.</div><table class="process-table"><thead><tr><th>Mixer batch</th><th>Filling machine</th><th>Sack weight</th><th>Weighed at</th></tr></thead><tbody>'+rows.map(r=>'<tr><td><b>'+r[0]+'</b></td><td>'+r[1]+'</td><td><b>'+r[2]+'</b></td><td>'+r[3]+'</td></tr>').join('')+'</tbody></table><div class="process-mobile-note">Sample scale readings · QR-based sack count is not live yet.</div></section>';
+  zone.insertAdjacentHTML('beforeend',html);
+ }
+ if(stage==='production'){
+  zone.querySelectorAll('.machine-card').forEach(card=>{
+   if(!card.querySelector('.machine-name')||card.querySelector('.mifad-timeline'))return;
+   const name=card.querySelector('.machine-name').textContent.trim(); if(!name.toLowerCase().includes('mixer'))return;
+   const motor=Array.from(card.querySelectorAll('.signal-box')).find(b=>b.querySelector('.signal-label')?.textContent.toLowerCase().includes('motor'));
+   const gate=Array.from(card.querySelectorAll('.signal-box')).find(b=>b.querySelector('.signal-label')?.textContent.toLowerCase().includes('gate'));
+   const running=(motor?.querySelector('.signal-value')?.textContent||'').toLowerCase().includes('running');
+   const gateOpen=(gate?.querySelector('.signal-value')?.textContent||'').toLowerCase().includes('open');
+   const room=(card.querySelector('.machine-id')?.textContent||'').toLowerCase().startsWith('r2')?'Room 2':'Room 1';
+   const filler=room==='Room 1'?'Filling Machine 1':'Filling Machine 2';
+   const current=running?'14 min':'00 min';
+   const timeline='<div class="timeline-card mifad-timeline"><div class="timeline-top"><span>Motor status timeline · '+room+'</span><span>08:00–16:00 · sample</span></div><div class="timeline-note">Continuous run now: <b>'+current+'</b></div><div class="timeline-track" aria-label="Sample motor status timeline"><span class="run" style="width:22%"></span><span class="stop" style="width:9%"></span><span class="run" style="width:37%"></span><span class="stop" style="width:8%"></span><span class="run" style="width:24%"></span></div><div class="timeline-labels"><span>08:00</span><span>10:00</span><span>12:00</span><span>14:00</span><span>16:00</span></div><div class="timeline-legend"><span><i style="background:#25b47a"></i>Motor running</span><span><i style="background:#eb6574"></i>Motor stopped · timer reset</span><span><i style="background:#f3a62f"></i>Discharge gate open</span></div></div>';
+   card.insertAdjacentHTML('beforeend',timeline);
+  });
+ }
+}
+const processObserver=new MutationObserver(()=>{tagGateBoxes();renderMifadProcessDemo();});
+processObserver.observe(document.getElementById('zoneContent'),{childList:true,subtree:true});
+renderMifadProcessDemo();
+const clock = document.getElementById("clock");
+  function renderFillingMachinePreview() {
+    document.querySelectorAll("#zoneContent .machine-card").forEach((card) => {
+      const name = card.querySelector(".machine-name")?.textContent.trim() || "";
+      if (!/^Filling Machine/i.test(name) || card.dataset.fillingPreviewApplied) return;
+
+      const isOpen = /1$/.test(name);
+      card.dataset.fillingPreviewApplied = "true";
+      card.querySelectorAll("*").forEach((element) => {
+        if (element.children.length !== 0) return;
+        const text = element.textContent.trim();
+        if (text === "No live data") element.remove();
+        if (text === "Filling-machine signals are not available in this preview.") {
+          element.textContent = "Sample state for UI preview · not live machine data.";
+        }
+      });
+
+      const status = document.createElement("div");
+      status.className = "filling-demo-status";
+      status.innerHTML = '<span class="filling-demo-dot"></span><strong></strong><small>Sample state</small>';
+      status.querySelector("strong").textContent = isOpen ? "Open" : "Closed";
+      status.classList.add(isOpen ? "is-open" : "is-closed");
+      card.append(status);
+    });
+  }
+
+  const fillingPreviewStyle = document.createElement("style");
+  fillingPreviewStyle.textContent = ".filling-demo-status{display:flex;align-items:center;gap:7px;margin-top:12px;padding:9px 11px;border-radius:9px;font-size:11px}.filling-demo-status small{margin-left:auto;font-size:9px;color:#74839a}.filling-demo-dot{width:7px;height:7px;border-radius:50%}.filling-demo-status.is-open{background:#e9f8f1;color:#12845e}.filling-demo-status.is-open .filling-demo-dot{background:#16a36f}.filling-demo-status.is-closed{background:#fff0f2;color:#c42d49}.filling-demo-status.is-closed .filling-demo-dot{background:#e3465d}";
+  document.head.append(fillingPreviewStyle);
+  renderFillingMachinePreview();
+  new MutationObserver(renderFillingMachinePreview).observe(document.getElementById("zoneContent"), { childList: true, subtree: true });
+      function removeSampleLabels() {
+        document.querySelectorAll(".demo-note, .iot-note, .process-mobile-note, .filling-demo-status small").forEach((label) => label.remove());
+        document.querySelectorAll("#zoneContent .timeline-top span").forEach((label) => {
+          const currentText = label.textContent;
+          const cleanedText = currentText.replace(/\s*[·-]\s*sample\s*$/i, "");
+          if (cleanedText !== currentText) label.textContent = cleanedText;
+        });
+        document.querySelectorAll(".empty-copy").forEach((label) => {
+          if (/sample state|not live machine data/i.test(label.textContent)) label.remove();
+        });
+        document.querySelectorAll("#zoneContent *, .gate-modal *").forEach((element) => {
+          if (element.children.length !== 0) return;
+          const text = element.textContent.trim();
+          if (/^sample\b/i.test(text)) {
+            element.remove();
+          } else if (/\bsample\b/i.test(text)) {
+            element.textContent = text.replace(/\bsample\b\s*/gi, "").trim();
+          }
+        });
+        document.querySelectorAll(".gate-modal div").forEach((label) => {
+          if (/^SAMPLE IOT EVENTS/i.test(label.textContent.trim())) label.textContent = "GATE EVENTS · LATEST FIRST";
+        });
+      }
+      removeSampleLabels();
+      new MutationObserver(removeSampleLabels).observe(document.body, { childList: true, subtree: true });
+
+  function updateClock() {
+        clock.textContent = new Intl.DateTimeFormat("en-GB", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false,
+        }).format(new Date());
+      }
+      updateClock();
+      setInterval(updateClock, 1000);
+    </script>
+  </body>
+</html>
